@@ -7,7 +7,7 @@ package ${packageName};
     </#list>
 </#if>
 
-public class ${className?capitalize} {
+public class ${className} {
     public static void main(String[] args) {
         <@macros.if functionName="empty" parameters=[]>
             System.out.println("my timtams shall not be fucked");
@@ -19,7 +19,7 @@ public class ${className?capitalize} {
             return;
         </@macros.if>
 
-        <@macros.if functionName="parameter" parameters=["${p1}", "${p2}"]>
+        <@macros.if functionName="parameters" parameters=["${p1}", "${p2}"]>
             System.out.println("my timtams shall not be fucked with singleton");
             return;
         </@macros.if>

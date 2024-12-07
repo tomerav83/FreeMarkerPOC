@@ -1,4 +1,9 @@
 {
-  "macros": ["if"],
-  "className": "basic"
+  "placeholders": {
+    "packageName": "default_value",
+    "className": "default_value",
+    "p1": "default_value",
+    "p2": "default_value",
+    "functionName": "default_value"
+  }
 }

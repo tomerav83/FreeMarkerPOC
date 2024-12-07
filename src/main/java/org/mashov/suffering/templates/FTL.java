@@ -1,15 +1,15 @@
 package org.mashov.suffering.templates;
 
-import freemarker.core.Macro;
 import freemarker.template.Configuration;
+import freemarker.template.Template;
 import freemarker.template.TemplateExceptionHandler;
 import org.mashov.suffering.config.Config;
-import org.mashov.suffering.macros.validation.MacroValidator;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
-public class Template {
+public class FTL {
     private static final Configuration CONFIGURATION;
 
     static {
@@ -23,16 +23,20 @@ public class Template {
         }
     }
 
-    public static Template get(String name) throws Exception {
-        MacroValidator.validate(name);
+    public static void generate(String name) throws Exception {
+        Config config = Config.get(name);
+        Template template = CONFIGURATION.getTemplate(name);
 
-        freemarker.template.Template template = CONFIGURATION.getTemplate(name);
+        File outputDir = new File("generated/" + config.getPackage().replace('.', '/'));
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
 
-        return new Template();
-    }
-
-    private static boolean validate(Config config, freemarker.template.Template template) throws Exception {
-        Macro macro = (Macro) template.getMacros().get(template.getName().replace(".ftl", ""));
-        return macro.getArgumentNames().length == config.get().size();
+        // Generate the output file
+        File outputFile = new File(outputDir, config.getClassName() + ".java");
+        try (FileWriter writer = new FileWriter(outputFile)) {
+            template.process(config.getConfig(), writer);
+            System.out.println("Generated: " + outputFile.getAbsolutePath());
+        }
     }
 }
